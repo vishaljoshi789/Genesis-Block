@@ -2,12 +2,26 @@ use std::vec;
 use blockchainlib::*;
 
 fn main() {
-    let mut block = Block::new(0, vec![0; 32], 0, "Genesis Block".to_string(), 0x00000fffffffffffffffffffffffffff);
-
-    let hash = block.hash();
-    block.set_hash(hash);
-    println!("{:?}", block);
+    let difficulty = 0x0000ffffffffffffffffffffffffffff;
+    let mut block = Block::new(0, vec![0; 32], 0, "Genesis Block".to_string(), difficulty);
 
     block.mine();
-    println!("{:?}", block);
+    println!("Mined genesis block {:?}", block);
+
+    let mut last_hash = block.hash.clone();
+
+    let mut blockchain = Blockchain {
+        blocks: vec![block]
+    };
+
+    for i in 1..=10 {
+        let mut block = Block::new(i, last_hash, 0, "Another Block".to_string(), difficulty);
+
+        block.mine();
+        println!("New block {:?}", block);
+
+        last_hash = block.hash.clone();
+
+        blockchain.blocks.push(block);
+    }
 }
