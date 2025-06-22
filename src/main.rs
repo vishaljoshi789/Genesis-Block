@@ -3,7 +3,7 @@ use blockchainlib::*;
 
 fn main() {
     let difficulty = 0x0000ffffffffffffffffffffffffffff;
-    let mut block = Block::new(0, vec![0; 32], 0, "Genesis Block".to_string(), difficulty);
+    let mut block = Block::new(1, vec![0; 32], 0, "Genesis Block".to_string(), difficulty);
 
     block.mine();
     println!("Mined genesis block {:?}", block);
@@ -14,7 +14,12 @@ fn main() {
         blocks: vec![block]
     };
 
-    println!("Verify: {}", blockchain.verify());
+    if blockchain.verify() {
+        println!("Verify: True");
+    } else {
+        println!("Verify: False");
+        return;
+    }
 
     for i in 1..=10 {
         let mut block = Block::new(i, last_hash, 0, "Another Block".to_string(), difficulty);
@@ -26,6 +31,11 @@ fn main() {
 
         blockchain.blocks.push(block);
 
-        println!("Verify: {}", blockchain.verify());
+        if blockchain.verify() {
+            println!("Verify: True");
+        } else {
+            println!("Verify: False");
+            break;
+        }
     }
 }
