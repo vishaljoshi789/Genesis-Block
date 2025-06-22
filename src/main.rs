@@ -14,6 +14,8 @@ fn main() {
         blocks: vec![block]
     };
 
+    println!("Verify: {}", blockchain.verify());
+
     for i in 1..=10 {
         let mut block = Block::new(i, last_hash, 0, "Another Block".to_string(), difficulty);
 
@@ -23,5 +25,7 @@ fn main() {
         last_hash = block.hash.clone();
 
         blockchain.blocks.push(block);
+
+        println!("Verify: {}", blockchain.verify());
     }
 }
